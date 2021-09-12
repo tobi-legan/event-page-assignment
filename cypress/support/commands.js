@@ -37,6 +37,11 @@ Cypress.Commands.add("clickButton", (buttonTextName) => {
   cy.findByRole('button', {name: buttonTextName}).click();
 });
 
+
+Cypress.Commands.add('findButton', (buttonTextName) => {
+  return cy.findByRole('button', {name: buttonTextName});
+})
+
 Cypress.Commands.add("getTextCheckIfTextExists", (textName) => {
   cy.findByText(textName).should('exist');
 });

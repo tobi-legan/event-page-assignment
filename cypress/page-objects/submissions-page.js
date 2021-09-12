@@ -29,6 +29,15 @@ export function clearAllFilters(){
 
 }
 
+export function findElementWithPlaceholder(placeholderValue){
+
+    return cy.get('form').findByPlaceholderText(placeholderValue);
+}
+
+export function getImage(imageRoleName){
+    return cy.findByRole('img', { name: `${imageRoleName}` });
+}
+
 export function getFilterAllFiltersForFilterGroup(filterGroupName){
 
     cy.findAllByRole('heading', {name: filterGroupName}).parent().parent().siblings().within(() => {
