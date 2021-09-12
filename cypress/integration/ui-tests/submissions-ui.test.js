@@ -1,5 +1,4 @@
 import * as submissionsPage from "../../page-objects/submissions-page";
-import * as cookieRelatedFunctions from "../../cookieRelatedFunctions";
 import * as FacetFiltersApiCalls from "../api-tests/filter-facets.test";
 import * as SubmissionsFiltersApiCalls from "../api-tests/filter-submissions-api.test";
 
@@ -11,8 +10,9 @@ describe('Consists of all the automated tests under the Event landing page (over
     beforeEach( () => {
         submissionsPage.navigate();
 
+        cy.log('Open applitools eyes to help with visual validation');
         cy.eyesOpen({
-            appName: 'Morressier Test', batchName: 'Test Submissions'
+            appName: 'Morressier Tests', batchName: 'New Batch'
         });
     });
 
@@ -22,23 +22,33 @@ describe('Consists of all the automated tests under the Event landing page (over
 
     
     it("To ensure that the user can open the conference page as a visitor ", () => {
+        //this helps take a screenshot of the page using applitools eyes and helps analyse the screenshot with a benchmark screenshot saved 
         cy.eyesCheckWindow('Check that landing page works and everything that needs to be displayed is displayed ');
 
+        cy.log('Check that The Event Name exists')
         cy.getTextCheckIfTextExists("ACS Spring 2020 National Meeting & Expo");
-    });
 
-    it("To ensure that the footer of the page is populated with the correct information about morressier and other links", () => {
-        cy.getByRole('image', { name: 'Morressier' }).should('exist');
+        cy.log('Check that the morressier logo and Icon are returned');
+        submissionsPage.getImage('Morressier Logo').should('exist');
+        submissionsPage.getImage('Morressier Icon').should('exist');
 
-        cy.getByRole('')
 
-        //"© Copyright "
     });
 
     it('To ensure that the conference information is displayed correctly on the page after the page is loaded', () => {
+        cy.log('Check that the conference image is returned');
+        submissionsPage.getImage('user avatar').should('exist');
 
-        cy.fin
-        //verify the links on the conference
+        //Check conference Topic
+        cy.log('Check the conference topic');
+        cy.getTextCheckIfTextExists('Macromolecular Chemistry: The Second Century');
+        
+        //Check for conference host
+        cy.log('Check the conference host');
+        cy.getTextCheckIfTextExists('American Chemical Society');
+
+        cy.log('Check the links on the conference page');
+        //verify the links on the conference page
         cy
             .verifyLink('acs.org', 'https://www.acs.org/content/acs/en/meetings/national-meeting/registration/attendees/coronavirus-faq.html');
 
@@ -60,6 +70,7 @@ describe('Consists of all the automated tests under the Event landing page (over
     //});
 
     it('To ensure that the cookie notification banner disappears after the user clicks on the "Got it" button', () => {
+        cy.log('Check that the cookieBannerDismissed cookie does not exist when user first visits the site');
         cy.getCookie('cookieBannerDismissed').should('not.exist');
 
         submissionsPage.checkThatCookieBannerIsDisplayed();
@@ -87,11 +98,37 @@ describe('Consists of all the automated tests under the Event landing page (over
         submissionsPage.checkThatCookieBannerIsNotDisplayed(); 
     });
 
-    it('', () => {
+    it.only('To ensure that user can See the search field and an Add filter button on the page', () => {
+        submissionsPage.findElementWithPlaceholder('Search').should('exist');
+
+        cy.findButton('Add filter').should('exist');
+
 
     });
 
-    it.only("Check to make sure that user can open all filter groups and see all the filter values in a group", () => {
+    
+
+
+});
+
+describe('Consists of all the automated tests under the submissions list with search & filtering Module on the regression sheet' , () => {
+
+    beforeEach( () => {
+        submissionsPage.navigate();
+
+        //Remove the cookie notification banner
+        cy.clickButton("Got it");
+
+        cy.eyesOpen({
+            appName: 'Morressier Test', batchName: 'Test Submissions'
+        });
+    });
+
+    afterEach(() => {
+        cy.eyesClose();
+    })
+
+    it("Check to make sure that user can open all filter groups and see all the filter values in a group", () => {
         
         var queryParamsforFacetEndpoint = {
             type: "event_posters",
@@ -137,10 +174,4 @@ describe('Consists of all the automated tests under the Event landing page (over
 
         
     });
-
-
-});
-
-describe('Consists of all the automated tests under the submissions list with search & filtering Module on the regression sheet' , () => {
-
 });
