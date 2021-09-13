@@ -66,16 +66,21 @@ function submissionRequest(conferenceRefId, queryParamsforSubmissionsFilterEndpo
 
 } 
 
-describe("Submission Filter tests", () => {
-    it("Check that all the submission ID's returned also return all the attributes for that submission", () => {
-        
-        submissionRequest("5e733c5acde2b641284a7e27", queryParamsforSubmissionsFilterEndpointDefault)
-            .then((response) => {
-                var responseBody = response.body;
-                var responseStatus = response.status;
-
-                expect(responseStatus).to.eql(200);
-            })
-        
+export function interceptQuerySearchApiCall(query, ref_id, offset,limit){
+  
+      //intercept and wait for request
+      cy.intercept(
+        `https://www.morressier.com/api/v1/discovery/events/${ref_id}/posters/filter-search?offset=${offset}&limit=${limit}&query=${query}`).as(`${query}`);
+  }
+  
+  export function waitForQuerySearchApi(query){
+    cy.wait(`@${query}`)
+              .then(({response}) => {
+              console.log(response.statusCode)
+              expect(response.statusCode).to.eq(200);
     });
-});
+
+
+//"https://www.morressier.com/api/v1/discovery/events/5e733c5acde2b641284a7e27/posters/filter-search?offset=48&limit=24&query=rent"
+
+  }

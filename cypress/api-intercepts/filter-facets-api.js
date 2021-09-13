@@ -38,21 +38,3 @@ export function waitForFacetsApisGetFacetsHits(facet_name){
             return response.body.facetHits;
   });
 }
-
-/*
-$.extend(true, skillet.person, {
-  name: {
-    first: 'updated'
-  },
-  birthday: {
-    day: 'updated',
-    year: 'updated'
-  }
-});
-
-myDog.name = "Happy Coder";
-*/ 
-
-function FacetRequestInterceptResponse(conferenceRefId, queryParamsforSubmissionsFilterEndpoint, fixtureFile){
-
-}
